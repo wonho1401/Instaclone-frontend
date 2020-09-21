@@ -1,23 +1,29 @@
 import React from "react";
+import { gql } from "apollo-boost";
+import GlobalStyles from "../Styles/GlobalStyles";
+import { ThemeProvider } from "styled-components";
+import Theme from "../Styles/Theme";
+import Router from "./Router";
+import { ApolloProvider, useQuery } from "react-apollo-hooks";
+import Client from "../Apollo/Client";
 
-function App() {
+const QUERY = gql`
+  {
+    isLoggedIn @client
+  }
+`;
+
+export default () => {
+  const {
+    data: { isLoggedIn },
+  } = useQuery(QUERY);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={Theme}>
+      <>
+        <GlobalStyles />
+        <Router isLoggedIn={isLoggedIn} />
+      </>
+    </ThemeProvider>
   );
-}
-
-export default App;
+};
