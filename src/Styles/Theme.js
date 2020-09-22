@@ -11,8 +11,8 @@ export default {
   redColor: "#ed4956",
   boxBorder: "1px solid #e6e6e6",
   borderRadius: "4px",
-  whiteBox: `${BORDER_RADIUS}
-             ${BOXBORDER}
+  whiteBox: `border:${BOXBORDER};
+             border-radius:${BORDER_RADIUS};
              background-color:white;
   `,
 };
