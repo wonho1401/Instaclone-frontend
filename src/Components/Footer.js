@@ -18,7 +18,7 @@ const ListItem = styled.li`
   &:not(:last-child) {
     margin-right: 16px;
   }
-`;
+`; //🤮
 
 const Link = styled.a`
   color: ${(props) => props.theme.darkBlueColor};
