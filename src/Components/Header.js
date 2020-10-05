@@ -47,7 +47,7 @@ const SearchInput = styled(Input)`
   height: auto;
   border-radius: 3px;
   text-align: center;
-  width: 120%;
+  width: 150%;
   &::placeholder {
     opacity: 0.8;
     font-weight: 200;
@@ -70,8 +70,8 @@ const ME = gql`
 
 export default withRouter(({ history }) => {
   const search = useInput("");
-  const meQuery = useQuery(ME);
-
+  const { data } = useQuery(ME);
+  console.log(data);
   const onSearchSubmit = (e) => {
     e.preventDefault();
     history.push(`/search?term=${search.value}`);
@@ -98,9 +98,15 @@ export default withRouter(({ history }) => {
             <HeaderLink to="/notifications">
               <HeartEmpty />
             </HeaderLink>
-            <HeaderLink to="/nickname">
-              <User />
-            </HeaderLink>
+            {!data ? (
+              <HeaderLink to="/#">
+                <User />
+              </HeaderLink>
+            ) : (
+              <HeaderLink to={data.me.nickname}>
+                <User />
+              </HeaderLink>
+            )}
           </HeaderColumn>
         </HeaderColumn>
       </HeaderWrapper>
