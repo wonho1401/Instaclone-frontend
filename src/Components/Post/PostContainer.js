@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import useInput from "../../Hooks/useInput";
 import PostPresenter from "./PostPresenter";
-import { useMutation } from "react-apollo-hooks";
+import { ME } from "../../SharedQueries";
+import { useMutation, useQuery } from "react-apollo-hooks";
 import { ADD_COMMENT, TOGGLE_LIKE } from "./PostQueries";
 import { toast } from "react-toastify";
 
@@ -20,8 +21,9 @@ const PostContainer = ({
   const [isLikedS, setIsLiked] = useState(isLiked);
   const [likeCountS, setLikeCount] = useState(likeCount);
   const [currentItem, setCurrentItem] = useState(0);
+  const [selfComments, setSelfComments] = useState([]);
   const comment = useInput("");
-
+  const { data: meQuery } = useQuery(ME);
   const [toggleLikeMutation] = useMutation(TOGGLE_LIKE, {
     variables: { postId: id },
   });
@@ -44,6 +46,8 @@ const PostContainer = ({
   }, [currentItem]);
 
   const toggleLike = async () => {
+    //일단 하트 눌러지고 뒤에서 뒤늦게 데이터 전송
+
     if (isLikedS === true) {
       setIsLiked(false);
       setLikeCount(likeCountS - 1);
@@ -57,6 +61,26 @@ const PostContainer = ({
       setIsLiked(!isLikedS);
       toast.error("Cant register Like");
     }
+  };
+
+  const onKeyPress = async (e) => {
+    const { which } = e;
+    //enter 누를시
+    if (which === 13) {
+      e.preventDefault();
+
+      //댓글을 적으면 데이터가 전송되어 입력될 때 코멘트 작성 완료된 게 보이게 함.
+      try {
+        const {
+          data: { addComment },
+        } = await addCommentMutation();
+        setSelfComments([...selfComments, addComment]);
+        comment.setValue("");
+      } catch {
+        toast.error("Cannot add a comment");
+      }
+    }
+    return;
   };
   return (
     <PostPresenter
@@ -73,6 +97,8 @@ const PostContainer = ({
       location={location}
       caption={caption}
       toggleLike={toggleLike}
+      onKeyPress={onKeyPress}
+      selfComments={selfComments}
     />
   );
 };
