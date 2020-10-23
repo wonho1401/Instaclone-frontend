@@ -57,7 +57,14 @@ const SearchPresenter = ({ searchTerm, loading, data }) => {
           {data.searchPost.length === 0 ? (
             <FatText text="No Posts Found" />
           ) : (
-            data.searchPost.map((post) => <SquarePost likeCount={post.likeCount} commentCount={post.commentCount} file={post.files[0]}/>)
+            data.searchPost.map((post) => (
+            <SquarePost 
+            key={post.id}
+            likeCount={post.likeCount} 
+            commentCount={post.commentCount} 
+            file={post.files[0]}
+            />
+            ))
           )}
         </PostSection>
       </Wrapper>
