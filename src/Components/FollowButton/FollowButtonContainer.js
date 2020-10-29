@@ -9,7 +9,7 @@ const FollowButtonContainer = ({ isFollowing, id }) => {
   const [followMutation] = useMutation(FOLLOW, { variables: { id } });
   const [unfollowMutation] = useMutation(UNFOLLOW, { variables: { id } });
 
-  const onClick =() => {
+  const onClick = () => {
     if (isFollowingS === true) {
       setIsFollowing(false);
       unfollowMutation();
@@ -24,7 +24,7 @@ const FollowButtonContainer = ({ isFollowing, id }) => {
 
 FollowButtonContainer.propTypes = {
   isFollowing: PropTypes.bool.isRequired,
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
 };
 
 export default FollowButtonContainer;
